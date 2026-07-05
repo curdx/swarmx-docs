@@ -27,7 +27,8 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: '指南', link: '/guide/what-is-swarmx', activeMatch: '/guide/' },
-          { text: '参考', link: '/reference/architecture', activeMatch: '/reference/' },
+          { text: '界面', link: '/dashboard/overview', activeMatch: '/dashboard/' },
+          { text: '参考', link: '/reference/engines', activeMatch: '/reference/' },
           { text: 'GitHub', link: 'https://github.com/curdx/swarmx' },
         ],
         sidebar: {
@@ -37,7 +38,19 @@ export default defineConfig({
               items: [
                 { text: 'swarmx 是什么', link: '/guide/what-is-swarmx' },
                 { text: '快速开始', link: '/guide/quickstart' },
+                { text: '桌面版', link: '/guide/desktop' },
+                { text: '安装与登录引擎', link: '/guide/install-engines' },
                 { text: '安装 Zulu 与配置 License', link: '/guide/zulu-setup' },
+              ],
+            },
+            {
+              text: '核心概念',
+              items: [
+                { text: '工作原理', link: '/guide/how-it-works' },
+                { text: '编排器与角色', link: '/guide/orchestrator-and-roles' },
+                { text: '黑板与收件箱', link: '/guide/blackboard-and-inbox' },
+                { text: '唤醒机制', link: '/guide/wake-mechanism' },
+                { text: '工作方向与隔离', link: '/guide/directions-and-isolation' },
               ],
             },
             {
@@ -49,12 +62,28 @@ export default defineConfig({
               ],
             },
           ],
+          '/dashboard/': [
+            {
+              text: '界面',
+              items: [
+                { text: '界面总览', link: '/dashboard/overview' },
+                { text: '创建工作空间', link: '/dashboard/create-workspace' },
+                { text: '工作空间视图', link: '/dashboard/workspace-views' },
+                { text: 'Agent 抽屉', link: '/dashboard/agent-drawer' },
+                { text: '工具页', link: '/dashboard/tool-pages' },
+                { text: '设置', link: '/dashboard/settings' },
+              ],
+            },
+          ],
           '/reference/': [
             {
               text: '参考',
               items: [
-                { text: '工作原理', link: '/reference/architecture' },
+                { text: '引擎参考', link: '/reference/engines' },
                 { text: '配置项', link: '/reference/configuration' },
+                { text: '数据与隐私', link: '/reference/data-and-privacy' },
+                { text: '术语表', link: '/reference/glossary' },
+                { text: '常见问题', link: '/reference/faq' },
               ],
             },
           ],
@@ -78,7 +107,8 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Guide', link: '/en/guide/what-is-swarmx', activeMatch: '/en/guide/' },
-          { text: 'Reference', link: '/en/reference/architecture', activeMatch: '/en/reference/' },
+          { text: 'Dashboard', link: '/en/dashboard/overview', activeMatch: '/en/dashboard/' },
+          { text: 'Reference', link: '/en/reference/engines', activeMatch: '/en/reference/' },
           { text: 'GitHub', link: 'https://github.com/curdx/swarmx' },
         ],
         sidebar: {
@@ -88,7 +118,19 @@ export default defineConfig({
               items: [
                 { text: 'What is swarmx', link: '/en/guide/what-is-swarmx' },
                 { text: 'Quick start', link: '/en/guide/quickstart' },
+                { text: 'Desktop app', link: '/en/guide/desktop' },
+                { text: 'Install & sign in to engines', link: '/en/guide/install-engines' },
                 { text: 'Install Zulu & set your license', link: '/en/guide/zulu-setup' },
+              ],
+            },
+            {
+              text: 'Core concepts',
+              items: [
+                { text: 'How it works', link: '/en/guide/how-it-works' },
+                { text: 'Orchestrator & roles', link: '/en/guide/orchestrator-and-roles' },
+                { text: 'Blackboard & inbox', link: '/en/guide/blackboard-and-inbox' },
+                { text: 'Wake mechanism', link: '/en/guide/wake-mechanism' },
+                { text: 'Directions & isolation', link: '/en/guide/directions-and-isolation' },
               ],
             },
             {
@@ -100,12 +142,28 @@ export default defineConfig({
               ],
             },
           ],
+          '/en/dashboard/': [
+            {
+              text: 'Dashboard',
+              items: [
+                { text: 'Overview', link: '/en/dashboard/overview' },
+                { text: 'Create a workspace', link: '/en/dashboard/create-workspace' },
+                { text: 'Workspace views', link: '/en/dashboard/workspace-views' },
+                { text: 'Agent drawer', link: '/en/dashboard/agent-drawer' },
+                { text: 'Tool pages', link: '/en/dashboard/tool-pages' },
+                { text: 'Settings', link: '/en/dashboard/settings' },
+              ],
+            },
+          ],
           '/en/reference/': [
             {
               text: 'Reference',
               items: [
-                { text: 'How it works', link: '/en/reference/architecture' },
+                { text: 'Engines', link: '/en/reference/engines' },
                 { text: 'Configuration', link: '/en/reference/configuration' },
+                { text: 'Data & privacy', link: '/en/reference/data-and-privacy' },
+                { text: 'Glossary', link: '/en/reference/glossary' },
+                { text: 'FAQ', link: '/en/reference/faq' },
               ],
             },
           ],

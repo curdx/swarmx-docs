@@ -42,8 +42,8 @@ swarmx 面向 macOS 与 Linux。进程回收依赖 Unix 进程组信号，数据
 | 变量 | 默认值 | 说明 |
 |---|---|---|
 | `SWARMX_RETENTION_DAYS` | `30` | 启动时清理早于 N 天的记录。`0` 或负值表示永久保留。 |
-| `SWARMX_MAX_LIVE_AGENTS` | 内置上限 | 同时在线 agent 的最大数量（派发时的背压）。 |
-| `SWARMX_MAX_SPAWN_DEPTH` | 内置上限 | agent 派发 agent 的最大链深（防止失控派发）。 |
+| `SWARMX_MAX_LIVE_AGENTS` | `256` | 同时在线 agent 的最大数量（派发时的背压）。 |
+| `SWARMX_MAX_SPAWN_DEPTH` | `6` | agent 派发 agent 的最大链深（防止失控派发）。 |
 | `SWARMX_MAX_ONESHOT_QUERIES` | `4` | 一次性辅助查询的最大并发数（如提示优化、台账压缩），防止循环导致进程激增。 |
 | `SWARMX_FUSION_JUDGE_TIMEOUT_MS` | `900000`（15 分钟） | 融合竞赛守护机制等待自动评审的最长时间，超时后强制走确定性兜底，保证批次不会滞留于评审中。 |
 | `SWARMX_FUSION_IMPL_TIMEOUT_MS` | `1200000`（20 分钟） | 仅全自动模式：等待参赛模型落定的最长时间，超时后仍进入评审阶段。 |
