@@ -8,11 +8,11 @@ export default defineConfig({
   ignoreDeadLinks: 'localhostLinks',
 
   title: 'swarmx',
-  description: '把你本机真实的 CLI 组成一支会协作的 AI 团队',
+  description: '让本机的编码 CLI 组成一支协作的 AI 团队',
 
   head: [
     ['meta', { property: 'og:title', content: 'swarmx' }],
-    ['meta', { property: 'og:description', content: '把你本机真实的 CLI 组成一支会协作的 AI 团队' }],
+    ['meta', { property: 'og:description', content: '让本机的编码 CLI 组成一支协作的 AI 团队' }],
   ],
 
   themeConfig: {
