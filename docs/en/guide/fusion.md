@@ -1,37 +1,26 @@
 # Fusion
 
-Fusion hands the **same need** to a few models; each implements it independently in
-an isolated git worktree. Attach an **objective check** (e.g. `pytest`, `cargo
-test`) as a hard gate, and a judge synthesizes the best of them back into the main
-line.
+Fusion hands the **same requirement** to multiple models to implement separately, each working independently in an isolated git worktree; you can attach an **objective check command** (such as `pytest` or `cargo test`) as a hard gate, after which a reviewer model synthesizes the best of each solution and merges it back into the mainline.
 
 ## One-click autopilot
 
-Type one need, tick "autopilot", click once — the rest runs on its own:
+Just enter a one-line requirement, check **Autopilot**, and click **Start** — the rest of the process runs automatically:
 
-1. The server picks a panel of available models (races distinct CLIs if you have
-   two or more, otherwise several models under one zulu license).
-2. Each model implements the need in its own isolated worktree.
-3. Once the contestants have committed, it enters the synthesize judge stage.
-4. The judge synthesizes the best version and merges it into the main line.
+1. The server automatically selects available models to form the competing lineup (a cross-engine contest when two or more different CLIs are present, otherwise several models run under a single Zulu license).
+2. Each model implements the requirement in its own isolated worktree.
+3. Once all competing models have committed, it automatically enters the synthesis review stage.
+4. The reviewer model synthesizes the best version and merges it into the mainline.
 
-No manual steps. A **server-side watchdog** backstops the verdict: whether or not a
-model finishes cleanly, the batch never silently stalls — it either merges or
-falls back to a manual pick.
+No manual intervention is needed at any point. The decision is backstopped by a **server-side guardian mechanism**: regardless of whether a model finishes cleanly, the batch never silently stalls — it merges once the conditions are met, otherwise it falls back to a manual decision.
 
 ## Manual mode
 
-Turn autopilot off for the classic flow: name 2–4 contestants yourself, drive them
-to implement, then hit "judge / auto-judge / synthesize" and pick a winner to
-merge. Use it when you want to control every step.
+Turning off **Autopilot** gives a step-by-step flow: specify 2 to 4 competing models yourself, drive them to implement, then click **Review** or **Synthesize best**, and finally choose the winning solution and merge it. Suited to scenarios where you want to control every step.
 
-## Objective check (optional but recommended)
+## Objective check (optional, recommended)
 
-Give a check command (like `python3 check.py`, `cargo test`) and swarmx runs it for
-real inside each contestant's worktree. That's harder evidence than reading a diff:
-any contestant that fails the check is out, no matter how clean its code looks.
+Once you provide a check command (such as `python3 check.py` or `cargo test`), swarmx actually runs it inside each competing model's worktree. Compared with reading a code diff by hand, this is harder evidence: any solution that fails the check will not be selected, no matter how elegant its code looks.
 
 ## Prerequisite
 
-The models are powered by Comate Zulu (or your logged-in claude / codex etc. in
-cross-engine mode). See [Install Zulu and set your license](/en/guide/zulu-setup).
+The multi-model capability is provided by Comate Zulu (or, in cross-engine mode, the claude, codex, and other CLIs you are already logged in to). For setup, see [Install Zulu and configure a license](/en/guide/zulu-setup).

@@ -1,40 +1,31 @@
-# Install Zulu and set your license
+# Install Zulu and configure a license
 
-The multi-model features — [research committee](/en/guide/research-committee) and
-[fusion](/en/guide/fusion) — are powered by
-[Comate Zulu](https://www.npmjs.com/package/@comate/zulu): **one Comate license
-reaches a dozen-plus models** (DeepSeek / GLM / Kimi / MiniMax, and more).
+The multi-model capabilities of the [research committee](/en/guide/research-committee) and [fusion](/en/guide/fusion) are provided by [Comate Zulu](https://www.npmjs.com/package/@comate/zulu): a single Comate license gives access to more than a dozen models, including DeepSeek, GLM, Kimi, and MiniMax.
 
 ## One-click install
 
 1. Open **Settings → Plugins**.
-2. On the **Comate Zulu** row, click **One-click install**. The backend runs
-   `npm install -g @comate/zulu` and streams the log to you; when it finishes the
-   card flips to "Installed" with no reload.
-3. Paste your **Comate license** into the input on the same page and save.
+2. On the Comate Zulu row, click **One-click install**. The server runs `npm install -g @comate/zulu` and streams the log back in real time; when it finishes, the card updates to **Installed** automatically, with no page refresh.
+3. In the license field on the same page, enter your Comate license and save.
 
-The license lives only in `~/.swarmx/comate.json` — it isn't uploaded and never
-enters git.
+The license is stored only locally in `~/.swarmx/comate.json`; it is never uploaded and never enters version control.
 
 ## Manual install
 
-You can also install it yourself:
+You can also install it yourself from a terminal:
 
 ```bash
 npm install -g @comate/zulu
-zulu --version        # verify
+zulu --version
 ```
 
-Then set the license from Settings → Plugins as above.
+Once installed, enter the license under **Settings → Plugins** as above.
 
-## After setup
+## Verify
 
-- Comate Zulu shows "Installed / Usable" in Settings → Plugins, listing every
-  model the license can reach.
-- Open the "Research Committee" or "Fusion" tab in any workspace to use them.
+- In **Settings → Plugins**, Comate Zulu shows as **Installed / Available** and lists every model the license can reach.
+- Open the **Research committee** or **Fusion** tab in any workspace to use the multi-model capabilities.
 
 ::: tip
-If zulu is installed but no license is set, the model list will be empty and the
-research committee will prompt you to configure it. Paste the license and you're
-set.
+If Zulu is installed but no license is configured, the model list will be empty and the research committee will prompt you to set one up. Once you enter the license, everything works.
 :::

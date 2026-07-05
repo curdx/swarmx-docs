@@ -1,90 +1,70 @@
-# Configuration (`SWARMX_*` environment variables)
+# Configuration
 
-swarmx-server reads all configuration from `SWARMX_*` environment variables.
-**None are required for a normal local run** — every one has a default. Set them
-before launching the server (or the Tauri app, which spawns the server).
-
-This file is the single reference for every variable the code reads; it is
-guarded by `scripts/harness-check.mjs` (rule 6 / 规则7) so it can't silently
-drift out of sync with the code.
+All configuration for the swarmx server is read from `SWARMX_*` environment variables. **None of them need to be set for a normal local run** — every one has a default. To override a value, set it before launching the server (or the Tauri application).
 
 ## Platform support
 
-swarmx targets **macOS and Linux** (Unix). The PTY teardown that reclaims a
-spawned CLI and its descendants relies on Unix process-group signals (`killpg`
-+ SIGTERM/SIGKILL), and data paths default off `$HOME`. The release pipeline
-also builds Windows artifacts, but Windows is **unverified / experimental** — on
-non-Unix only the direct shim child is killed (a grandchild CLI can be left
-running). Use macOS or Linux for a supported setup.
+swarmx targets macOS and Linux. Process reclamation relies on Unix process-group signals, and data paths default to a base under `$HOME`. The release process also builds Windows artifacts, but Windows is currently experimental and not fully verified; macOS or Linux is recommended.
 
 ## Network
 
-| Variable | Default | Purpose |
+| Variable | Default | Description |
 |---|---|---|
-| `SWARMX_PORT` | `7777` | TCP port the server binds (loopback only). Also derives `SWARMX_SERVER_URL` and the URL baked into spawned agents' wake-hook + MCP config. |
-| `SWARMX_SERVER_URL` | `http://127.0.0.1:<PORT>` | Base REST URL agents / MCP use to reach the server. Derived from `SWARMX_PORT`; set explicitly only for unusual setups. |
+| `SWARMX_PORT` | `7777` | The server's listening port (loopback only). Also determines the server address injected into agent configuration. |
+| `SWARMX_SERVER_URL` | `http://127.0.0.1:<PORT>` | The base address agents and MCP use to reach the server, derived from the port; set explicitly only in special cases. |
 
 ## Data locations
 
-| Variable | Default | Purpose |
+| Variable | Default | Description |
 |---|---|---|
 | `SWARMX_DB_PATH` | `~/.swarmx/swarmx.db` | SQLite database file. |
-| `SWARMX_WORKSPACES_DIR` | `~/.swarmx/workspaces` | Per-agent scratch workspaces. |
-| `SWARMX_BLACKBOARD_DIR` | `~/.swarmx/blackboard` | Blackboard markdown KV store. |
-| `SWARMX_RECORDINGS_DIR` | `~/.swarmx/recordings` | asciicast session recordings. |
+| `SWARMX_WORKSPACES_DIR` | `~/.swarmx/workspaces` | Working directories for each agent. |
+| `SWARMX_BLACKBOARD_DIR` | `~/.swarmx/blackboard` | Blackboard storage directory. |
+| `SWARMX_RECORDINGS_DIR` | `~/.swarmx/recordings` | Directory for session recording files. |
 
-## Resource / binary paths (override bundled defaults — mostly for dev)
+## Resource and binary paths
 
-| Variable | Default | Purpose |
+The following variables override built-in defaults and are intended mainly for development environments.
+
+| Variable | Default | Description |
 |---|---|---|
-| `SWARMX_CLI_PLUGINS_DIR` | bundled `cli-plugins/` | Built-in CLI plugin manifests. |
-| `SWARMX_USER_CLI_PLUGINS_DIR` | `~/.swarmx/cli-plugins` | User-added CLI plugins (extend / override built-ins). |
-| `SWARMX_ROLES_DIR` | bundled `roles/` | Role SOP templates. |
-| `SWARMX_SPELLS_DIR` | bundled `spells/` | Spell definitions. |
-| `SWARMX_WEB_DIR` | resolved next to the binary | Built web bundle the server serves. |
-| `SWARMX_SHIM_PATH` | sibling of the server binary | Path to the `swarmx-shim` binary. |
-| `SWARMX_MCP_PATH` | sibling of the server binary | Path to the `swarmx-mcp` binary. |
-| `SWARMX_OPENCODE_PLUGIN` | bundled `cli-plugins/opencode/swarmx-wake.js` | Path to the opencode wake plugin JS merged into each opencode worker's per-agent config (the Tauri sidecar sets this to the packaged resource). If unresolved, opencode workers still get swarm tools but no auto-wake. |
+| `SWARMX_CLI_PLUGINS_DIR` | Built-in | Directory for built-in CLI plugin manifests. |
+| `SWARMX_USER_CLI_PLUGINS_DIR` | `~/.swarmx/cli-plugins` | User-defined CLI plugins (extend or override the built-ins). |
+| `SWARMX_ROLES_DIR` | Built-in | Role template directory. |
+| `SWARMX_SPELLS_DIR` | Built-in | Workflow recipe directory. |
+| `SWARMX_WEB_DIR` | Alongside the binary | Directory of the built frontend the server serves. |
+| `SWARMX_SHIM_PATH` | Alongside the server binary | Path to the shim binary. |
+| `SWARMX_MCP_PATH` | Alongside the server binary | Path to the MCP binary. |
+| `SWARMX_OPENCODE_PLUGIN` | Built-in | Path to the opencode wake plugin. In the desktop version the sidecar injects the packaged absolute path; if it cannot be resolved, opencode still works but without auto-wake. |
 
-## Limits & retention
+## Limits and retention
 
-| Variable | Default | Purpose |
+| Variable | Default | Description |
 |---|---|---|
-| `SWARMX_RETENTION_DAYS` | `30` | At boot, prune rows older than N days. `0` (or negative) = keep everything, never prune. |
-| `SWARMX_MAX_LIVE_AGENTS` | built-in cap | Max concurrently live agents (back-pressure on spawn). |
-| `SWARMX_MAX_SPAWN_DEPTH` | built-in cap | Max depth of agent-spawns-agent chains (runaway-spawn guard). |
-| `SWARMX_MAX_ONESHOT_QUERIES` | `4` | Max concurrent throwaway one-shot CLI queries (prompt-optimize / ledger-compact). These spawn a real CLI outside the live-agent cap; this bounds them so a loop can't fork-bomb. |
-| `SWARMX_FUSION_JUDGE_TIMEOUT_MS` | `900000` (15 min) | How long the fusion judge watchdog waits for the auto-judge agent to decide before forcing a deterministic fallback (synth → merge the judge's captured work; pick+check → the objective-gate winner; otherwise → `needs_decision`). Guarantees a batch never stalls in `judging`. |
-| `SWARMX_FUSION_IMPL_TIMEOUT_MS` | `1200000` (20 min) | Autopilot only: how long the autochain waits for the auto-implement contestants to settle before entering the judge stage anyway. |
+| `SWARMX_RETENTION_DAYS` | `30` | At startup, prune records older than N days. `0` or a negative value means keep everything permanently. |
+| `SWARMX_MAX_LIVE_AGENTS` | Built-in cap | Maximum number of simultaneously live agents (back-pressure during dispatch). |
+| `SWARMX_MAX_SPAWN_DEPTH` | Built-in cap | Maximum chain depth of agents dispatching agents (prevents runaway dispatch). |
+| `SWARMX_MAX_ONESHOT_QUERIES` | `4` | Maximum concurrency of one-shot auxiliary queries (such as prompt optimization and ledger compaction), preventing loops from causing a process explosion. |
+| `SWARMX_FUSION_JUDGE_TIMEOUT_MS` | `900000` (15 minutes) | The maximum time the fusion guardian mechanism waits for automatic review before forcing a deterministic fallback, ensuring a batch is never stuck in review. |
+| `SWARMX_FUSION_IMPL_TIMEOUT_MS` | `1200000` (20 minutes) | Autopilot mode only: the maximum time to wait for competing models to settle before entering the review stage anyway. |
 
-## Behaviour switches
+## Behavior switches
 
-| Variable | Default | Purpose |
+| Variable | Default | Description |
 |---|---|---|
-| `SWARMX_AUTO_RESPAWN_ORCHESTRATORS` | unset (off) | `1` = on boot, re-spawn orchestrators for alive workspaces the orphan sweep killed. Can burn an LLM turn / revive a provider you're avoiding — opt-in. |
-| `SWARMX_ALLOW_PAID_TRANSPORT` | unset (off) | Opt-in to a CLI's paid SDK/API transport when its plugin declares one (billing guard). |
-| `SWARMX_ALLOW_CLAUDE_PRINT` | unset (off) | Opt-in to claude non-PTY print/SDK mode (a separate billing surface). |
+| `SWARMX_AUTO_RESPAWN_ORCHESTRATORS` | Unset (off) | When set to `1`, the orchestrator is re-launched at startup for workspaces that are still alive. This can consume a model turn, so it is off by default. |
+| `SWARMX_ALLOW_PAID_TRANSPORT` | Unset (off) | Explicitly allow use of a paid SDK/API channel when a CLI declares one (a billing safeguard). |
+| `SWARMX_ALLOW_CLAUDE_PRINT` | Unset (off) | Explicitly allow claude's non-PTY print/SDK mode (a separate billing surface). |
 
 ## Agent git identity
 
-| Variable | Default | Purpose |
+| Variable | Default | Description |
 |---|---|---|
-| `SWARMX_GIT_USER_NAME` | global git default | git author name agents commit under. |
-| `SWARMX_GIT_USER_EMAIL` | global git default | git author email agents commit under. |
+| `SWARMX_GIT_USER_NAME` | Global git default | Author name agents use when committing. |
+| `SWARMX_GIT_USER_EMAIL` | Global git default | Author email agents use when committing. |
 
 ## Diagnostics
 
-| Variable | Default | Purpose |
+| Variable | Default | Description |
 |---|---|---|
-| `SWARMX_MCP_LOG` | unset | Enable verbose `swarmx-mcp` logging. |
-
-## Internal / not user-settable
-
-- `SWARMX_AGENT_ID` — injected by the server into each spawned worker so its
-  MCP subprocess knows its own identity. **Do not set this yourself.**
-
-## Test-only (used by the test suite / CI; ignore in normal operation)
-
-- `SWARMX_LEAK_CANARY` — env-isolation canary asserted by a PTY test.
-- `SWARMX_TEST_TRUTHY` — truthy-parsing fixture.
-- `SWARMX_GOLDEN_PORT` — port for the golden-CLI smoke scripts.
+| `SWARMX_MCP_LOG` | Unset | Enable verbose MCP logging. |

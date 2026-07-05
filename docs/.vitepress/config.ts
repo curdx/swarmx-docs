@@ -27,21 +27,21 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: '指南', link: '/guide/what-is-swarmx', activeMatch: '/guide/' },
-          { text: '参考', link: '/reference/configuration', activeMatch: '/reference/' },
+          { text: '参考', link: '/reference/architecture', activeMatch: '/reference/' },
           { text: 'GitHub', link: 'https://github.com/curdx/swarmx' },
         ],
         sidebar: {
           '/guide/': [
             {
-              text: '上手',
+              text: '入门',
               items: [
                 { text: 'swarmx 是什么', link: '/guide/what-is-swarmx' },
                 { text: '快速开始', link: '/guide/quickstart' },
-                { text: '安装 Zulu 与配置 license', link: '/guide/zulu-setup' },
+                { text: '安装 Zulu 与配置 License', link: '/guide/zulu-setup' },
               ],
             },
             {
-              text: '三种玩法',
+              text: '协作模式',
               items: [
                 { text: '蜂群协作', link: '/guide/swarm' },
                 { text: '研究委员会', link: '/guide/research-committee' },
@@ -53,9 +53,8 @@ export default defineConfig({
             {
               text: '参考',
               items: [
-                { text: '配置（SWARMX_* 环境变量）', link: '/reference/configuration' },
-                { text: '架构', link: '/reference/architecture' },
-                { text: '交接协议', link: '/reference/handoff-protocol' },
+                { text: '工作原理', link: '/reference/architecture' },
+                { text: '配置项', link: '/reference/configuration' },
               ],
             },
           ],
@@ -79,7 +78,7 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Guide', link: '/en/guide/what-is-swarmx', activeMatch: '/en/guide/' },
-          { text: 'Reference', link: '/en/reference/configuration', activeMatch: '/en/reference/' },
+          { text: 'Reference', link: '/en/reference/architecture', activeMatch: '/en/reference/' },
           { text: 'GitHub', link: 'https://github.com/curdx/swarmx' },
         ],
         sidebar: {
@@ -93,7 +92,7 @@ export default defineConfig({
               ],
             },
             {
-              text: 'Three modes',
+              text: 'Collaboration modes',
               items: [
                 { text: 'Swarm collaboration', link: '/en/guide/swarm' },
                 { text: 'Research committee', link: '/en/guide/research-committee' },
@@ -105,9 +104,8 @@ export default defineConfig({
             {
               text: 'Reference',
               items: [
-                { text: 'Configuration (SWARMX_* env vars)', link: '/en/reference/configuration' },
-                { text: 'Architecture', link: '/en/reference/architecture' },
-                { text: 'Handoff protocol', link: '/en/reference/handoff-protocol' },
+                { text: 'How it works', link: '/en/reference/architecture' },
+                { text: 'Configuration', link: '/en/reference/configuration' },
               ],
             },
           ],

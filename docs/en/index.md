@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: swarmx
-  text: Turn the real CLIs on your machine into a collaborating AI team
-  tagline: Drive real claude / codex / opencode / reasonix / zulu in one browser tab — plus a multi-model research committee and code fusion.
+  text: Turn your local coding CLIs into a collaborating AI team
+  tagline: Orchestrate real claude, codex, opencode, and reasonix in a single browser tab, connected to a multi-model research committee and fusion.
   actions:
     - theme: brand
       text: Quick start
@@ -18,27 +18,23 @@ hero:
 
 features:
   - title: Swarm collaboration
-    details: Tell one persistent orchestrator what you need; it decides whether to do it or spawn workers. Members coordinate over a shared inbox and blackboard; write a key and every agent waiting on it wakes up.
+    details: Talk to a resident orchestrator in natural language, and it breaks the task down by size and dispatches workers. Members collaborate through a shared inbox and blackboard, and any blackboard write instantly wakes the relevant agents.
     link: /en/guide/swarm
     linkText: Learn more
   - title: Research committee
-    details: Several models answer the same question in parallel; a judge breaks the answers into consensus / contradictions / unique points / blind spots, then synthesizes a verdict. For tech selection and design review.
+    details: Multiple models answer the same question in parallel; a reviewer model distills the consensus, disagreements, unique insights, and blind spots, then synthesizes them into a single conclusion. Suited to technology selection and design review.
     link: /en/guide/research-committee
     linkText: Learn more
   - title: Fusion
-    details: Hand the same need to a few models; each writes its own version, an objective check gates them, and a judge synthesizes the best into the main line. Type one need, click once — no manual steps.
+    details: The same requirement is handed to several models to implement separately, with an objective check as the admission gate; a reviewer model synthesizes the best solution and merges it into the mainline. One requirement, one click, fully automatic.
     link: /en/guide/fusion
     linkText: Learn more
 ---
 
 <div style="max-width:960px;margin:48px auto 0;padding:0 24px;">
 
-It runs the CLIs themselves, not a wrapper. OAuth, rate limits, plan quotas — all
-of it behaves exactly like typing `claude` in your own terminal. swarmx never
-reads or stores your tokens.
+swarmx runs the CLIs you have already installed and logged in to, rather than re-wrapping a model API. Authentication, rate limits, and plan quotas behave exactly as they do when you use these tools directly in a terminal; swarmx neither reads nor stores any credentials.
 
-Rust backend (axum, loopback-only), Vite + React frontend, packaged with Tauri.
-The multi-model committee and fusion are powered by
-[Comate Zulu](/en/guide/zulu-setup) — one license, a dozen-plus models.
+The server is built in Rust and listens only on the local loopback address; the frontend is built with Vite and React; the desktop version is packaged with Tauri. The multi-model capabilities behind the research committee and fusion are provided by [Comate Zulu](/en/guide/zulu-setup) — a single license gives access to more than a dozen models.
 
 </div>

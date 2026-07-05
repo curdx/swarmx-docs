@@ -1,34 +1,31 @@
-# 安装 Zulu 与配置 license
+# 安装 Zulu 与配置 License
 
-[研究委员会](/guide/research-committee)和[融合竞赛](/guide/fusion)的多模型能力，由
-[Comate Zulu](https://www.npmjs.com/package/@comate/zulu) 提供——**一把 Comate license
-就能调十几个模型**（DeepSeek / GLM / Kimi / MiniMax 等）。
+[研究委员会](/guide/research-committee)与[融合竞赛](/guide/fusion)的多模型能力由 [Comate Zulu](https://www.npmjs.com/package/@comate/zulu) 提供：一份 Comate License 即可调用十余个模型，涵盖 DeepSeek、GLM、Kimi、MiniMax 等。
 
 ## 一键安装
 
 1. 打开「设置 → 插件」。
-2. 找到 **Comate Zulu** 那一栏，点「一键安装」。后端会跑 `npm install -g @comate/zulu`
-   并把日志实时回传给你；装完卡片自动翻成「已安装」，无需刷新。
-3. 在同一页的 **Comate License** 输入框里粘贴你的 license，保存。
+2. 在 Comate Zulu 一栏点击「一键安装」。服务端将执行 `npm install -g @comate/zulu` 并实时回传日志；安装完成后卡片自动更新为「已安装」，无需刷新页面。
+3. 在同一页面的 License 输入框中填入你的 Comate License 并保存。
 
-license 只存本机 `~/.swarmx/comate.json`，不会上传，也不会进 git。
+License 仅保存在本机 `~/.swarmx/comate.json`，不会上传，也不会纳入版本控制。
 
 ## 手动安装
 
-也可以自己在终端里装：
+也可在终端中自行安装：
 
 ```bash
 npm install -g @comate/zulu
-zulu --version        # 验证
+zulu --version
 ```
 
-装好后同样回「设置 → 插件」填 license。
+安装完成后，同样在「设置 → 插件」中填入 License。
 
-## 装好之后
+## 验证
 
-- 「设置 → 插件」里 Comate Zulu 会显示「已安装 / 可用」，并列出这把 license 能用的所有模型。
-- 打开任一工作空间的「研究委员会」或「竞赛」标签就能用上多模型了。
+- 「设置 → 插件」中 Comate Zulu 显示为「已安装 / 可用」，并列出该 License 可调用的全部模型。
+- 打开任一工作空间的「研究委员会」或「融合竞赛」标签，即可使用多模型能力。
 
-::: tip
-只装了 zulu、没填 license，模型列表会是空的，研究委员会会提示你去配置。填上就好。
+::: tip 提示
+若已安装 Zulu 但尚未配置 License，模型列表将为空，研究委员会会提示前往配置。填入 License 后即可正常使用。
 :::

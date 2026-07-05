@@ -1,90 +1,70 @@
-# Configuration (`SWARMX_*` environment variables)
+# 配置项
 
-swarmx-server reads all configuration from `SWARMX_*` environment variables.
-**None are required for a normal local run** — every one has a default. Set them
-before launching the server (or the Tauri app, which spawns the server).
+swarmx 服务端的全部配置均通过 `SWARMX_*` 环境变量读取。**本地正常运行无需设置任何一项**——每一项都有默认值。如需覆盖，请在启动服务端（或 Tauri 应用）之前设置。
 
-This file is the single reference for every variable the code reads; it is
-guarded by `scripts/harness-check.mjs` (rule 6 / 规则7) so it can't silently
-drift out of sync with the code.
+## 平台支持
 
-## Platform support
+swarmx 面向 macOS 与 Linux。进程回收依赖 Unix 进程组信号，数据路径默认基于 `$HOME`。发布流程同时构建 Windows 产物，但 Windows 目前为实验性、未经完整验证，建议在 macOS 或 Linux 上使用。
 
-swarmx targets **macOS and Linux** (Unix). The PTY teardown that reclaims a
-spawned CLI and its descendants relies on Unix process-group signals (`killpg`
-+ SIGTERM/SIGKILL), and data paths default off `$HOME`. The release pipeline
-also builds Windows artifacts, but Windows is **unverified / experimental** — on
-non-Unix only the direct shim child is killed (a grandchild CLI can be left
-running). Use macOS or Linux for a supported setup.
+## 网络
 
-## Network
-
-| Variable | Default | Purpose |
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_PORT` | `7777` | TCP port the server binds (loopback only). Also derives `SWARMX_SERVER_URL` and the URL baked into spawned agents' wake-hook + MCP config. |
-| `SWARMX_SERVER_URL` | `http://127.0.0.1:<PORT>` | Base REST URL agents / MCP use to reach the server. Derived from `SWARMX_PORT`; set explicitly only for unusual setups. |
+| `SWARMX_PORT` | `7777` | 服务端监听端口（仅回环）。同时决定注入到 agent 配置中的服务地址。 |
+| `SWARMX_SERVER_URL` | `http://127.0.0.1:<PORT>` | agent 与 MCP 访问服务端的基础地址，由端口推导；仅特殊场景需显式设置。 |
 
-## Data locations
+## 数据位置
 
-| Variable | Default | Purpose |
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_DB_PATH` | `~/.swarmx/swarmx.db` | SQLite database file. |
-| `SWARMX_WORKSPACES_DIR` | `~/.swarmx/workspaces` | Per-agent scratch workspaces. |
-| `SWARMX_BLACKBOARD_DIR` | `~/.swarmx/blackboard` | Blackboard markdown KV store. |
-| `SWARMX_RECORDINGS_DIR` | `~/.swarmx/recordings` | asciicast session recordings. |
+| `SWARMX_DB_PATH` | `~/.swarmx/swarmx.db` | SQLite 数据库文件。 |
+| `SWARMX_WORKSPACES_DIR` | `~/.swarmx/workspaces` | 各 agent 的工作目录。 |
+| `SWARMX_BLACKBOARD_DIR` | `~/.swarmx/blackboard` | 黑板存储目录。 |
+| `SWARMX_RECORDINGS_DIR` | `~/.swarmx/recordings` | 会话录制文件目录。 |
 
-## Resource / binary paths (override bundled defaults — mostly for dev)
+## 资源与二进制路径
 
-| Variable | Default | Purpose |
+以下变量用于覆盖内置默认值，主要面向开发环境。
+
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_CLI_PLUGINS_DIR` | bundled `cli-plugins/` | Built-in CLI plugin manifests. |
-| `SWARMX_USER_CLI_PLUGINS_DIR` | `~/.swarmx/cli-plugins` | User-added CLI plugins (extend / override built-ins). |
-| `SWARMX_ROLES_DIR` | bundled `roles/` | Role SOP templates. |
-| `SWARMX_SPELLS_DIR` | bundled `spells/` | Spell definitions. |
-| `SWARMX_WEB_DIR` | resolved next to the binary | Built web bundle the server serves. |
-| `SWARMX_SHIM_PATH` | sibling of the server binary | Path to the `swarmx-shim` binary. |
-| `SWARMX_MCP_PATH` | sibling of the server binary | Path to the `swarmx-mcp` binary. |
-| `SWARMX_OPENCODE_PLUGIN` | bundled `cli-plugins/opencode/swarmx-wake.js` | Path to the opencode wake plugin JS merged into each opencode worker's per-agent config (the Tauri sidecar sets this to the packaged resource). If unresolved, opencode workers still get swarm tools but no auto-wake. |
+| `SWARMX_CLI_PLUGINS_DIR` | 内置 | 内置 CLI 插件清单目录。 |
+| `SWARMX_USER_CLI_PLUGINS_DIR` | `~/.swarmx/cli-plugins` | 用户自定义 CLI 插件（扩展或覆盖内置）。 |
+| `SWARMX_ROLES_DIR` | 内置 | 角色模板目录。 |
+| `SWARMX_SPELLS_DIR` | 内置 | 工作流配方目录。 |
+| `SWARMX_WEB_DIR` | 二进制同级目录 | 服务端提供的前端构建产物目录。 |
+| `SWARMX_SHIM_PATH` | 服务端二进制同级 | shim 二进制路径。 |
+| `SWARMX_MCP_PATH` | 服务端二进制同级 | MCP 二进制路径。 |
+| `SWARMX_OPENCODE_PLUGIN` | 内置 | opencode 唤醒插件路径。桌面版由 sidecar 注入打包后的绝对路径；未解析到时 opencode 仍可用，但不具备自动唤醒。 |
 
-## Limits & retention
+## 限额与保留
 
-| Variable | Default | Purpose |
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_RETENTION_DAYS` | `30` | At boot, prune rows older than N days. `0` (or negative) = keep everything, never prune. |
-| `SWARMX_MAX_LIVE_AGENTS` | built-in cap | Max concurrently live agents (back-pressure on spawn). |
-| `SWARMX_MAX_SPAWN_DEPTH` | built-in cap | Max depth of agent-spawns-agent chains (runaway-spawn guard). |
-| `SWARMX_MAX_ONESHOT_QUERIES` | `4` | Max concurrent throwaway one-shot CLI queries (prompt-optimize / ledger-compact). These spawn a real CLI outside the live-agent cap; this bounds them so a loop can't fork-bomb. |
-| `SWARMX_FUSION_JUDGE_TIMEOUT_MS` | `900000` (15 min) | How long the fusion judge watchdog waits for the auto-judge agent to decide before forcing a deterministic fallback (synth → merge the judge's captured work; pick+check → the objective-gate winner; otherwise → `needs_decision`). Guarantees a batch never stalls in `judging`. |
-| `SWARMX_FUSION_IMPL_TIMEOUT_MS` | `1200000` (20 min) | Autopilot only: how long the autochain waits for the auto-implement contestants to settle before entering the judge stage anyway. |
+| `SWARMX_RETENTION_DAYS` | `30` | 启动时清理早于 N 天的记录。`0` 或负值表示永久保留。 |
+| `SWARMX_MAX_LIVE_AGENTS` | 内置上限 | 同时在线 agent 的最大数量（派发时的背压）。 |
+| `SWARMX_MAX_SPAWN_DEPTH` | 内置上限 | agent 派发 agent 的最大链深（防止失控派发）。 |
+| `SWARMX_MAX_ONESHOT_QUERIES` | `4` | 一次性辅助查询的最大并发数（如提示优化、台账压缩），防止循环导致进程激增。 |
+| `SWARMX_FUSION_JUDGE_TIMEOUT_MS` | `900000`（15 分钟） | 融合竞赛守护机制等待自动评审的最长时间，超时后强制走确定性兜底，保证批次不会滞留于评审中。 |
+| `SWARMX_FUSION_IMPL_TIMEOUT_MS` | `1200000`（20 分钟） | 仅全自动模式：等待参赛模型落定的最长时间，超时后仍进入评审阶段。 |
 
-## Behaviour switches
+## 行为开关
 
-| Variable | Default | Purpose |
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_AUTO_RESPAWN_ORCHESTRATORS` | unset (off) | `1` = on boot, re-spawn orchestrators for alive workspaces the orphan sweep killed. Can burn an LLM turn / revive a provider you're avoiding — opt-in. |
-| `SWARMX_ALLOW_PAID_TRANSPORT` | unset (off) | Opt-in to a CLI's paid SDK/API transport when its plugin declares one (billing guard). |
-| `SWARMX_ALLOW_CLAUDE_PRINT` | unset (off) | Opt-in to claude non-PTY print/SDK mode (a separate billing surface). |
+| `SWARMX_AUTO_RESPAWN_ORCHESTRATORS` | 未设置（关闭） | 设为 `1` 时，启动会为仍存活的工作空间重新拉起编排器。可能消耗一次模型回合，故默认关闭。 |
+| `SWARMX_ALLOW_PAID_TRANSPORT` | 未设置（关闭） | 当某 CLI 声明了付费 SDK/API 通道时，显式允许使用（计费保护）。 |
+| `SWARMX_ALLOW_CLAUDE_PRINT` | 未设置（关闭） | 显式允许 claude 的非 PTY 打印/SDK 模式（独立的计费面）。 |
 
-## Agent git identity
+## agent 的 git 身份
 
-| Variable | Default | Purpose |
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_GIT_USER_NAME` | global git default | git author name agents commit under. |
-| `SWARMX_GIT_USER_EMAIL` | global git default | git author email agents commit under. |
+| `SWARMX_GIT_USER_NAME` | 全局 git 默认 | agent 提交时使用的作者名。 |
+| `SWARMX_GIT_USER_EMAIL` | 全局 git 默认 | agent 提交时使用的作者邮箱。 |
 
-## Diagnostics
+## 诊断
 
-| Variable | Default | Purpose |
+| 变量 | 默认值 | 说明 |
 |---|---|---|
-| `SWARMX_MCP_LOG` | unset | Enable verbose `swarmx-mcp` logging. |
-
-## Internal / not user-settable
-
-- `SWARMX_AGENT_ID` — injected by the server into each spawned worker so its
-  MCP subprocess knows its own identity. **Do not set this yourself.**
-
-## Test-only (used by the test suite / CI; ignore in normal operation)
-
-- `SWARMX_LEAK_CANARY` — env-isolation canary asserted by a PTY test.
-- `SWARMX_TEST_TRUTHY` — truthy-parsing fixture.
-- `SWARMX_GOLDEN_PORT` — port for the golden-CLI smoke scripts.
+| `SWARMX_MCP_LOG` | 未设置 | 启用 MCP 的详细日志。 |
